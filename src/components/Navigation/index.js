@@ -1,22 +1,18 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Layout } from 'antd';
 
-import * as ROUTES from '../../constants/routes';
+
+const { Header, Content, Footer } = Layout;
 
 function Navigation(){
-    return <div>
-        <ul>
-            <li>
-                <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-            </li>
-            <li>
-                <Link to={ROUTES.LANDING}>Landing</Link>
-            </li>
-            <li>
-                <Link to={ROUTES.ADMIN}>Admin</Link>
-            </li>
-        </ul>
-    </div>
+    return (
+        <Layout>
+            <Header>
+                <h2 style={{color: 'white'}}>Outshifter Admin</h2>
+            </Header>
+        </Layout>
+
+    )
 
 }
 
