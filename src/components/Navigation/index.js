@@ -10,6 +10,7 @@ function Navigation(){
             <Header>
                 <h2 style={{color: 'white'}}>Outshifter Admin</h2>
             </Header>
+    
         </Layout>
 
     )

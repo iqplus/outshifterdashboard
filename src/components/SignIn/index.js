@@ -1,5 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Form, Input, Button, Checkbox } from 'antd';
+import firebase from '../firebase'; 
+import { useHistory, Redirect } from 'react-router-dom';
+import Admin from '../Admin';
+import { wait } from '@testing-library/react';
+
 
 const layout = { 
   labelCol: { span: 8 },
@@ -7,19 +12,40 @@ const layout = {
 };
 const tailLayout = {
   wrapperCol: { offset: 8, span: 16 },
-};
-
- 
+}; 
  
 function SignIn(){
 
-        const onFinish = values => {
-          console.log('Success:', values);
+        const [loggedIn, setLoggedIn] = useState(false);
+
+        const log = () => setLoggedIn(true);
+
+        async function onFinish(values) {
+          try {
+            await firebase.login(values.username, values.password)
+            log();
+            wait(1000);
+            console.log(loggedIn)
+            //protect admin route
+            if (loggedIn){
+              console.log('loging in - success')
+              return <Redirect to='admin'/>;
+            } else {
+              return <Redirect to='/' />;
+            } 
+            console.log(values.username, values.password)
+            
+          } catch (error) {
+            alert(error.message)
+          }
         };
       
         const onFinishFailed = errorInfo => {
           console.log('Failed:', errorInfo);
         };
+
+        const [email, setEmail] = useState('')
+        const [password, setPassword] = useState('') 
    
 
     return (
@@ -33,12 +59,11 @@ function SignIn(){
       onFinishFailed={onFinishFailed}
     >
       <Form.Item
-        style={{}}
         label="Username"
         name="username"
         rules={[{ required: true, message: 'Please input your username!' }]}
       >
-        <Input />
+        <Input value={email} onChange={(e) => setEmail(e.target.value)} />
       </Form.Item>
 
       <Form.Item
@@ -46,7 +71,7 @@ function SignIn(){
         name="password"
         rules={[{ required: true, message: 'Please input your password!' }]}
       >
-        <Input.Password />
+        <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
       </Form.Item>
 
       <Form.Item {...tailLayout} name="remember" valuePropName="checked">
